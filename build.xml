@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<project name="Youless data collector" basedir="." default="jar">
+    <property name="src" value="src"/>
+    <property name="output" value="bin"/>
+	<property name="dist" value="dist"/>
+		
+
+    <target name="compile" depends="create">
+    		<javac destdir="bin" debug="true">            
+            <src path="${src}"/>            
+            <classpath refid="build.classpath"/>
+        </javac>
+	    	<copy todir="bin/">
+    	   	    <fileset dir="src">
+    	    	      <include name="**/*.db"/>
+    	   	   	</fileset>
+    	    	</copy>
+
+    </target>
+	
+	<path id="build.classpath">
+	    	<fileset dir="${basedir}/">
+	    		<include name="lib/*.jar"/>
+	    	</fileset>
+    </path>
+    <target name="jar" depends="compile">
+	    	<copy file="log4j.properties" todir="bin"/>
+	    	<copy file="dataproperties.xml" todir="bin"/>
+
+        <pathconvert property="libs.project" pathsep=" ">
+        	 <mapper>  
+        	        <chainedmapper>  
+        	          <!-- remove absolute path -->  
+        	          <flattenmapper />  
+        	  
+        	          <!-- add lib/ prefix -->  
+        	          <globmapper from="*" to="lib/*" />  
+        	        </chainedmapper>  
+        	      </mapper>  
+        		<fileset dir="${basedir}/">
+         		<include name="lib/*.jar"/>
+        		</fileset>
+        	</pathconvert>
+
+    		<jar jarfile="${dist}/youlesscollector.jar">
+        		<fileset dir="bin"/>
+			<manifest>
+				<attribute name="Main-Class" value="nl.tiemensit.youlesscollector.app.Collector"/>
+				<attribute name="Class-Path" value="${libs.project}"/>
+			</manifest>
+    		</jar>
+    	   <copy todir="${dist}/lib">
+    	   <fileset dir="lib">
+    	      <include name="**/*.jar"/>
+    	   </fileset>
+    	  </copy>
+    </target>
+
+    <target name="clean">
+        <delete dir="${output}"/>
+		<delete dir="${dist}"/>
+    </target>
+
+    <target name="create" depends="clean">
+        <mkdir dir="${output}"/>
+		<mkdir dir="${dist}"/>
+		<mkdir dir="${dist}/lib"/>
+    </target>
+
+</project>
+

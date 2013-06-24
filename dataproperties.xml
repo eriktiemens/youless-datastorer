@@ -1,0 +1,7 @@
+ <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+   <comment>Youless data collector</comment>
+   <entry key="data.file">jdbc:sqlite:/var/data/youlessdata.db</entry>
+   <entry key="ipaddress">192.169.1.20</entry>
+   <entry key="development">true</entry>
+</properties>
